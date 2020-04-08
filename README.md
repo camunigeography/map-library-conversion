@@ -24,6 +24,7 @@ Dependencies
 ------------
 
 * [application.php application support library](http://download.geog.cam.ac.uk/projects/application/)
+* [csv.php CSV manipulation library](http://download.geog.cam.ac.uk/projects/csv/)
 * [frontControllerApplication.php front controller application implementation library](http://download.geog.cam.ac.uk/projects/frontcontrollerapplication/)
 * [pureContent.php general environment library](http://download.geog.cam.ac.uk/projects/purecontent/)
 * [FamFamFam Silk Icons set](http://www.famfamfam.com/lab/icons/silk/)

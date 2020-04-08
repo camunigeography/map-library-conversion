@@ -11,6 +11,7 @@ class mapLibraryConversion extends frontControllerApplication
 		$defaults = array (
 			'applicationName' => 'Map library catalogue conversion',
 			'useDatabase' => false,
+			'dataFile' => './data.csv',
 		);
 		
 		# Return the defaults
@@ -48,7 +49,28 @@ class mapLibraryConversion extends frontControllerApplication
 	# Home page
 	public function home ()
 	{
-		// TODO
+		
+		# Load the data
+		$data = $this->loadData ();
+	}
+	
+	
+	# Function to load the CSV data
+	private function loadData ()
+	{
+		# Load the data
+		require_once ('csv.php');
+		$data = csv::getData ($this->settings['dataFile'], $stripKey = false, $hasNoKeys = true, $allowsRowsWithEmptyFirstColumn = true);
+		
+		# Trim cells and fix double-spaces
+		foreach ($data as $index => $row) {
+			foreach ($row as $key => $value) {
+				$data[$index][$key] = trim (str_replace ('  ', ' ', $value));
+			}
+		}
+		
+		# Return the data
+		return $data;
 	}
 }
 

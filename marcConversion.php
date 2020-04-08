@@ -70,13 +70,16 @@ class marcConversion
 		//# End if deleted
 		//if ($record['LOCATION'] == 'DELETED') {return false;}
 		
-		# ISBN
+		# Leader
 		$this->generateLeader ($record['Year']);
+		
+		# 005
+		$this->generate005 ();
 		
 		# ISBN
 		$this->generate007 ();
 		
-		# ISBN
+		# 008 field
 		$this->generate008 ();
 		
 		//# ISBN
@@ -195,6 +198,19 @@ class marcConversion
 		# Register the result
 		$this->fields['LDR'][0] = array (
 			'' => $string,
+		);
+	}
+	
+	
+	# 005 field
+	private function generate005 ()
+	{
+		# Date and Time of Latest Transaction; see: https://www.loc.gov/marc/bibliographic/bd005.html
+		$date = date ('YmdHis.0');
+
+		# Register the result
+		$this->fields['005'][0] = array (
+			'' => $date,
 		);
 	}
 	

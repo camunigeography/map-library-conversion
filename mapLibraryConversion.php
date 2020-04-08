@@ -141,6 +141,25 @@ class mapLibraryConversion extends frontControllerApplication
 		# Return the result
 		return $marc;
 	}
+	
+	
+	# Dot-end
+	private function dotEnd ($string)
+	{
+		return $string . (substr ($string, -1) == '.' ? '' : '.');
+	}
+	
+	
+	# Helper function to reformat words
+	private function reformatWords ($string)
+	{
+		# No change if any lower-case
+		if (preg_match ('/[a-z]/', $string)) {return $string;}
+		
+		$string = mb_strtolower ($string);
+		$string = ucwords ($string);
+		return $string;
+	}
 }
 
 ?>

@@ -215,12 +215,16 @@ class marcConversion
 	}
 	
 	
-	# 007 field
+	# 007 field - Physical Description Fixed Field; see: https://www.loc.gov/marc/bibliographic/bd007.html
 	private function generate007 ()
 	{
+		# Set the value for Map
+		# See: https://www.loc.gov/marc/bibliographic/bd007a.html
+		$string = 'aj#|||||';
+		
 		# Register the result
 		$this->fields['007'][0] = array (
-			'' => 'ta',
+			'' => $string,
 		);
 	}
 	

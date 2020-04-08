@@ -220,7 +220,7 @@ class marcConversion
 	{
 		# Register the result
 		$this->fields['007'][0] = array (
-			'a' => 'ta',
+			'' => 'ta',
 		);
 	}
 	

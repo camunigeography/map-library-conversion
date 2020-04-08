@@ -80,7 +80,7 @@ class marcConversion
 		$this->generate007 ();
 		
 		# 008 field
-		$this->generate008 ();
+		$this->generate008 ($record['Year'], $record['Author']);
 		
 		//# ISBN
 		//$this->generateIsbn ($record['ISBN']);
@@ -233,11 +233,130 @@ class marcConversion
 	
 	
 	# 008 field
-	private function generate008 ()
+	private function generate008 ($year, $publisher)
 	{
+		# Start the string
+		$string = '';
+		
+		# Positions 00-05: Date entered on system [format: yymmdd]
+		$string .= date ('ymd');
+
+		# Position 06: Type of date/Publication status
+		# Positions 07-10 - Date 1
+		# Positions 11-14 - Date 2
+		# See: https://www.loc.gov/marc/bibliographic/bd008a.html
+		switch (true) {
+			# Date range, e.g. 1889-1951:
+			case (preg_match ('/^([0-9]{4}) ?[-\/] ?([0-9]{4})$/', $year, $matches)):
+				$status06 = 'd' . $matches[1] . $matches[2];
+				break;
+			# Date range with second as two digits, e.g. 1964-77:
+			case (preg_match ('/^([0-9]{4}) ?[-\/] ?([0-9]{2})$/', $year, $matches)):
+				$status06 = 'd' . $matches[1] . substr ($matches[1], 0, 2) . $matches[2];
+				break;
+			# Date range with second as one digit, e.g. 1940-2:
+			case (preg_match ('/^([0-9]{4}) ?- ?([0-9]{1})$/', $year, $matches)):
+				$status06 = 'd' . $matches[1] . substr ($matches[1], 0, 3) . $matches[2];
+				break;
+			# Single date, e.g. 1978
+			case (preg_match ('/^([0-9]{4})$/', $year)):
+				$status06 = 's' . $year . '####';
+				break;
+			# Single date with circa, e.g. c1942
+			case (preg_match ('/^[c>]\.? ?([0-9]{4})$/', $year, $matches)):
+				$status06 = 's' . $matches[1] . '####';
+				break;
+			# No date or undated
+			case (in_array ($year, array ('undated', 'no date', 'unknown'))):
+			case (!strlen ($year)):
+				$status06 = 'n' . '####' . '####';
+				break;
+			# Catch other cases
+			default:
+				echo $year;
+		}
+		$string .= $status06;
+		
+		# Positions 15-17 - Place of publication, production, or execution
+		# See: https://www.loc.gov/marc/countries/countries_code.html
+		$string .= $this->getCountryCode ($publisher);
+		
+		# Positions 18-34 - Maps type section
+		
+		# Positions 18-21 - Relief
+		$string .= '||||';	// No attempt to code
+		
+		# Positions 22-23 - Projection
+		$string .= '||';	// No attempt to code
+		
+		# Position 24 - Undefined
+		$string .= '#';
+		
+		# Position 25 - Type of cartographic material
+		# Series vs single, based on whether there is a year range
+		$string .= (substr_count ($year, '-') ? 'b' : 'a');
+		
+		# Positions 26-27 - Undefined
+		$string .= '##';
+		
+		# Positions 28 - Government publication
+		$governmentOrganisations = array (
+			'Ordnance Survey',
+			'Geological Survey',
+			'War Office',
+			'GSGS',
+			'Ministry of Defence',
+			'MoD',
+			'Directorate of Overseas Surveys',
+			'Directorate of Colonial Surveys',
+			'Ministry of Agriculture',
+			'National Institute of Oceanography, GB',
+			'Hydrographic Office',
+			'US Army',
+			'National Geographic',
+			'Department of Defence',
+			'US Department',
+			'USGS',
+			'US Naval',
+		);
+		$governmentPublicationValue = '|';	// No attempt to code
+		if (strlen ($publisher)) {
+			foreach ($governmentOrganisations as $governmentOrganisation) {
+				if (substr_count ($governmentOrganisation, $publisher)) {
+					$governmentPublicationValue = 'f';
+					break;
+				}
+			}
+		}
+		$string .= $governmentPublicationValue;
+		
+		# Position 29 - Form of item
+		$string .= 'r';		// Assume 'Regular print reproduction'
+		
+		# Position 30 - Undefined
+		$string .= '#';
+		
+		# Position 31 - Index
+		$string .= '|';
+		
+		# Position 32 - Undefined
+		$string .= '#';
+		
+		# Position 33-34 - Special format characteristics
+		$string .= '||';	// No attempt to code
+		
+		# Position 35-37 - Language
+		$string .= '###';	// No information provided
+		
+		# Position 38 - Modified record
+		$string .= '#';		// Not modified
+		
+		# 39 - Cataloging source
+		$string .= '|';		// No attempt to code
+		
 		# Register the result
 		$this->fields['008'][0] = array (
-			'' => str_repeat ('x', 40) . ' TODO',
+			'' => $string,
 		);
 	}
 	
@@ -420,6 +539,197 @@ class marcConversion
 		
 		# Drawer and number
 		$this->fields['852'][0]['d'] = "Drawer {$drawer} {$number}";
+	}
+	
+	
+	# Function to get the country code
+	private function getCountryCode ($publisher)
+	{
+		# Define countries
+		$countries = array (
+			'xxk' => array (	// UK
+				'Ordnance Survey',
+				'Bartholomew',
+				'Britannia',
+				'Collins',
+				'Geological Survey',
+				'Scotland',
+				'England',
+				'GREAT BRITAIN',
+				'War Office',
+				'GSGS',
+				'Ministry of Defence',
+				'MoD',
+				'Manchester',
+				'Southampton',
+				'Directorate of Overseas Surveys',
+				'Directorate of Colonial Surveys',
+				'42nd Survey Engineer Regiment',
+				'London',
+				'Royal Geographical Society',
+				'BP Co. Ltd',
+				'Ministry of Agriculture',
+				'National Institute of Oceanography, GB',
+				'Hydrographic Office',
+			),
+			'xxu' => array (	// US
+				'American',
+				'US Army',
+				'National Geographic',
+				'Department of Defence',
+				'Geological Society of America',
+				'US Department',
+				'Kentucky',
+				'USGS',
+				'Washington',
+				'US Naval',
+				'Grand Canyon',
+			),
+			'bu#' => array (	// Bulgaria
+				'Bulgaria',
+			),
+			'ru#' => array (	// Russia
+				'Russia',
+				'Moscow',
+				'de Russie',
+				'USSR',
+				'Chicago',
+			),
+			'ug#' => array (	// Uganda
+				'Uganda',
+			),
+			'ag#' => array (	// Argentina
+				'Argentina',
+			),
+			'nz#' => array (	// New Zealand
+				'New Zealand',
+				'(NZ)',
+				'NZ Lands and Survey',
+			),
+			'ii#' => array (	// India
+				'India',
+			),
+			'cl#' => array (	// Chile
+				'Instituto Geografico Militar',
+			),
+			'xr#' => array (	// Czech Republic
+				'Czech Republic',
+			),
+			'fr#' => array (	// France
+				'Paris',
+				'Expeditions Polaires Francaises',
+			),
+			'xo#' => array (	// Slovakia
+				'Slovak Republic',
+				'Bratislava',
+			),
+			'dk#' => array (	// Danish
+				'Geodaetisk Institut',
+			),
+			'fi#' => array (	// Finland
+				'Finland',
+			),
+			'gw#' => array (	// Germany
+				'Deutscher',
+				'Hessischer',
+				'German',
+				'Stuttgart',
+				'Deutsche',
+			),
+			'hu#' => array (	// Hungary
+				'Cartographia',
+			),
+			'sz#' => array (	// Switzerland
+				'Geodetic Inst',
+			),
+			'po#' => array (	// Portugal
+				'Servicos Geologica',
+				'Portugal',
+			),
+			'sa#' => array (	// South Africa
+				'South Africa',
+				'Pretoria',
+				'Cape Town',
+			),
+			'ce#' => array (	// Sri Lanka
+				'Sri-Lanka',
+				'Ceylon',
+			),
+			'cl#' => array (	// Chile
+				'Chile',
+			),
+			'mg#' => array (	// Madagascar
+				'Madagascar',
+			),
+			'sj#' => array (	// Sudan
+				'Khartoum',
+			),
+			'is#' => array (	// Israel
+				'Israel',
+			),
+			'ne#' => array (	// Netherlands
+				'Dutch',
+			),
+			'ke#' => array (	// Kenya
+				'Kenya',
+			),
+			'bl#' => array (	// Brazil
+				'Brasil',
+			),
+			'at#' => array (	// Australia
+				'Australia',
+				'Hobart',
+				'Sydney',
+				'Canberra',
+				'Tasmania',
+				'Brisbane',
+			),
+			'ja#' => array (	// Japan
+				'Japan',
+			),
+			'sp#' => array (	// Spain
+				'Madrid',
+			),
+			'rh#' => array (	// Zimbabwe
+				'Rhodesia',
+				'Zimbabwe',
+			),
+			'bl#' => array (	// Brazil
+				'Rio de Janeiro',
+			),
+			'xxc' => array (	// Canada
+				'Canada',
+				'Ottawa',
+			),
+			'pl#' => array (	// Poland
+				'Warsaw',
+			),
+			'xx#' => array (	// Unknown
+				'Miscellaneous'
+			),
+		);
+		
+		# Loop through to do a string match
+		$placeCode = 'xx#';
+		if (strlen ($publisher)) {
+			foreach ($countries as $code => $names) {
+				foreach ($names as $name) {
+					if (substr_count ($publisher, $name)) {
+						$placeCode = $code;
+						break 2;
+					}
+				}
+			}
+		}
+		
+		/*
+		if ($placeCode == 'xx#') {
+			echo $publisher . "<br />";
+		}
+		*/
+		
+		# Return the place code
+		return $placeCode;
 	}
 }
 

@@ -49,9 +49,17 @@ class mapLibraryConversion extends frontControllerApplication
 	# Home page
 	public function home ()
 	{
+		# Define unicode symbols
+		$this->doubleDagger = chr(0xe2).chr(0x80).chr(0xa1);
 		
 		# Load the data
 		$data = $this->loadData ();
+		
+		# Create MARC records from the data
+		$marc = $this->createMarcRecords ($data);
+		
+		var_dump ($marc);
+		
 	}
 	
 	
@@ -71,6 +79,67 @@ class mapLibraryConversion extends frontControllerApplication
 		
 		# Return the data
 		return $data;
+	}
+	
+	
+	# Function to create MARC records from the data
+	private function createMarcRecords ($data)
+	{
+		# Convert each record
+		$marc = array ();
+		foreach ($data as $record) {
+			if ($marcRecord = $this->convertToMarc ($record)) {
+				$marc[] = $marcRecord;
+			}
+		}
+		
+		# Compile to string
+		$marc = implode ("\n\n", $marc);
+		
+		# Return the string
+		return $marc;
+	}
+	
+	
+	# Convert to MARC
+	private function convertToMarc ($record)
+	{
+		# Start an array of fields
+		$this->fields = array ();
+		
+		# Implement each field
+		// TODO
+		
+		# Assemble each line
+		$lines = array ();
+		foreach ($this->fields as $field => $instances) {
+			foreach ($instances as $subfields) {
+				
+				# Determine indicators
+				$indicators = '##';
+				if (isSet ($subfields['_'])) {
+					$indicators = $subfields['_'];
+					unset ($subfields['_']);
+				}
+				
+				# Add each subfields
+				$tokens = array ();
+				foreach ($subfields as $subfield => $value) {
+					if (strlen ($value)) {
+						$tokens[] = $this->doubleDagger . $subfield . $value;
+					}
+				}
+				
+				# Compile the line
+				$lines[] = $field . ' ' . $indicators . ' ' . implode (' ', $tokens);
+			}
+		}
+		
+		# Compile lines
+		$marc = "\n" . implode ("\n", $lines);
+		
+		# Return the result
+		return $marc;
 	}
 }
 

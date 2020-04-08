@@ -1,0 +1,22 @@
+# Map library catalogue conversion system Apache directives
+
+# Load using:
+#	# Map library catalogue conversion system
+#	Include /path/to/map-library-conversion/.httpd.conf.extract
+#	Use MacroMapLibraryConversion /library/maps "/path/to/site/:/path/to/map-library-conversion/:/path/to/php/libraries/"
+
+
+<Macro MacroMapLibraryConversion $baseUrl $includePath>
+	
+	# Include path
+	<LocationMatch $baseUrl>
+		php_value include_path "$includePath"
+	</LocationMatch>
+	
+	# Front controller application support
+	Use MacroFrontControllerApplication "$baseUrl/" "Map library catalogue conversion system"
+	
+	# Application routing
+	
+	
+</Macro>

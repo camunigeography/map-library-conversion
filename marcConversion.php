@@ -85,6 +85,9 @@ class marcConversion
 		//# ISBN
 		//$this->generateIsbn ($record['ISBN']);
 		
+		# 040 field
+		$this->generate040 ();
+		
 		# Author
 		$this->generateAuthors ($record['Author']);
 		
@@ -251,6 +254,18 @@ class marcConversion
 		# Register the result
 		$this->fields['020'][0] = array (
 			'a' => $isbn,
+		);
+	}
+	
+	
+	# 040 field - Cataloging Source; see: https://www.loc.gov/marc/bibliographic/bd040.html
+	private function generate040 ()
+	{
+		# Register the result
+		$this->fields['040'][0] = array (
+			'a' => 'UkCU-P',
+			'b' => 'eng',
+			'c' => 'aacr',
 		);
 	}
 	

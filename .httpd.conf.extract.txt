@@ -6,7 +6,7 @@
 #	Use MacroMapLibraryConversion /library/maps "/path/to/site/:/path/to/map-library-conversion/:/path/to/php/libraries/"
 
 
-<Macro MacroMapLibraryConversion $baseUrl $includePath>
+<Macro MacroMapLibraryConversion $baseUrl $repoPath $includePath>
 	
 	# Include path
 	<LocationMatch $baseUrl>
@@ -19,5 +19,8 @@
 	# Application routing
 	RewriteRule ^$baseUrl/(export)/$ $baseUrl/index.html?action=$1 [L]
 	RewriteRule ^$baseUrl/(export)$ $baseUrl/$1/ [R]
+	
+	# Downloads
+	AliasMatch ^$baseUrl/export/(.+)-marc.(txt|mrc|mrk)$ $repoPath/export/$1-marc.$2
 	
 </Macro>

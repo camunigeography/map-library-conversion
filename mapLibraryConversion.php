@@ -60,11 +60,13 @@ class mapLibraryConversion extends frontControllerApplication
 		$data = $this->loadData ();
 		
 		# Create MARC records from the data
-		$marc = $this->createMarcRecords ($data);
+		$marcText = $this->createMarcRecords ($data);
 		
 		# Display the records
-		$this->displayRecords ($marc);
+		$html = $this->displayRecords ($marcText);
 		
+		# Show the HTML
+		echo $html;
 	}
 	
 	
@@ -75,10 +77,33 @@ class mapLibraryConversion extends frontControllerApplication
 		$data = $this->loadData ();
 		
 		# Create MARC records from the data
-		$marc = $this->createMarcRecords ($data);
+		$marcText = $this->createMarcRecords ($data);
 		
-		// TODO
+		# Convert Bibcheck
+		require_once ('createMarcExport.php');
+		$createMarcExport = new createMarcExport ();
+		$createMarcExport->createExport ($marcText, $errorsHtml);
 		
+		# Create links to the downloadable files
+		$html  = "\n<h3>Download data</h3>";
+		$html .= '
+		<div class="graybox">
+			<ul class="heavilyspaced">
+				<li><a class="actions" href="' . $this->baseUrl . '/export/geog-maplibrary-marc.txt"><strong>MARC21 data (text)</strong></a></li>
+				<li><a class="actions" href="' . $this->baseUrl . '/export/geog-maplibrary-marc.mrc"><strong>MARC21 data (binary .mrc)</strong></a></li>
+			</ul>
+		</div>
+		';
+		
+		# Show Bibcheck errors
+		$bibcheckErrorsFile = dirname (__FILE__) . '/export/geog-maplibrary-marc.errors.txt';
+		$html .= "\n<h3>Bibcheck errors</h3>";
+		$html .= "\n<pre>";
+		$html .= htmlspecialchars (file_get_contents ($bibcheckErrorsFile));
+		$html .= "\n</pre>";
+		
+		# Show the HTML
+		echo $html;
 	}
 	
 	
@@ -131,8 +156,11 @@ class mapLibraryConversion extends frontControllerApplication
 		$doubleDagger = chr(0xe2).chr(0x80).chr(0xa1);
 		$string = preg_replace ("/({$doubleDagger}[a-z0-9])/", '<strong>\1</strong>', $string);
 		
-		# Render for display
-		echo "\n<pre>" . $string . "\n</pre>";
+		# Compile the HTML
+		$html = "\n<pre>" . $string . "\n</pre>";
+		
+		# Return the HTML
+		return $html;
 	}
 }
 

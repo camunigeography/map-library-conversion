@@ -26,7 +26,7 @@ class mapLibraryConversion extends frontControllerApplication
 		# Define available tasks
 		$actions = array (
 			'home' => array (
-				'description' => false,
+				'description' => 'Records, converted',
 				'url' => '',
 				'tab' => 'Home',
 				'icon' => 'house',

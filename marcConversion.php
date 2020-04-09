@@ -431,6 +431,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['245'][0] = array (
+			'_' => '10',
 			'a' => 'Map of ' . $this->reformatWords ($title) . ($remainder ? ':' : ' /'),
 		);
 		if ($remainder) {

@@ -31,6 +31,12 @@ class mapLibraryConversion extends frontControllerApplication
 				'tab' => 'Home',
 				'icon' => 'house',
 			),
+			'export' => array (
+				'description' => 'Export MARC21 output',
+				'tab' => 'Export',
+				'url' => 'export/',
+				'icon' => 'database_go',
+			),
 		);
 		
 		# Return the actions
@@ -58,6 +64,20 @@ class mapLibraryConversion extends frontControllerApplication
 		
 		# Display the records
 		$this->displayRecords ($marc);
+		
+	}
+	
+	
+	# Export page
+	public function export ()
+	{
+		# Load the data
+		$data = $this->loadData ();
+		
+		# Create MARC records from the data
+		$marc = $this->createMarcRecords ($data);
+		
+		// TODO
 		
 	}
 	

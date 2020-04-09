@@ -17,6 +17,7 @@
 	Use MacroFrontControllerApplication "$baseUrl/" "Map library catalogue conversion system"
 	
 	# Application routing
-	
+	RewriteRule ^$baseUrl/(export)/$ $baseUrl/index.html?action=$1 [L]
+	RewriteRule ^$baseUrl/(export)$ $baseUrl/$1/ [R]
 	
 </Macro>

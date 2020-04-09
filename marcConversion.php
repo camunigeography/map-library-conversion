@@ -421,22 +421,11 @@ class marcConversion
 	# Title
 	private function generate245 ($title, $author)
 	{
-		# Deal with Remainder of title
-		$remainder = false;
-		if (substr_count ($title, ':')) {
-			list ($title, $remainder) = explode (':', $title, 2);
-			$title = trim ($title);
-			$remainder = trim ($remainder);
-		}
-		
 		# Register the result
 		$this->fields['245'][0] = array (
 			'_' => '10',
-			'a' => 'Map of ' . $this->reformatWords ($title) . ($remainder ? ':' : ' /'),
+			'a' => 'Map of ' . $this->reformatWords ($title) . ' /',
 		);
-		if ($remainder) {
-			$this->fields['245'][0]['b'] = $remainder . ' /';
-		}
 		
 		# Author
 		$this->fields['245'][0]['c'] = $this->dotEnd ($author);

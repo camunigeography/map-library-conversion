@@ -97,10 +97,15 @@ class mapLibraryConversion extends frontControllerApplication
 		
 		# Show Bibcheck errors
 		$bibcheckErrorsFile = dirname (__FILE__) . '/export/geog-maplibrary-marc.errors.txt';
+		$bibcheckErrors = trim (file_get_contents ($bibcheckErrorsFile));
 		$html .= "\n<h3>Bibcheck errors</h3>";
-		$html .= "\n<pre>";
-		$html .= htmlspecialchars (file_get_contents ($bibcheckErrorsFile));
-		$html .= "\n</pre>";
+		if ($bibcheckErrors) {
+			$html .= "\n<pre>";
+			$html .= htmlspecialchars ($bibcheckErrors);
+			$html .= "\n</pre>";
+		} else {
+			$html .= "\n<p>{$this->tick} No Bibcheck errors.</p>";
+		}
 		
 		# Show the HTML
 		echo $html;

@@ -47,7 +47,7 @@ class marcConversion
 				}
 				
 				# Compile the line
-				$lines[] = $field . ' ' . $indicators . ' ' . implode (' ', $tokens);
+				$lines[] = $field . ' ' . $indicators . ' ' . implode ($tokens);
 			}
 		}
 		

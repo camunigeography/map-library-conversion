@@ -402,6 +402,7 @@ class marcConversion
 		# Add each author
 		foreach ($authors as $index => $author) {
 			$author = trim ($author);
+			$author = $this->formatInitials ($author);
 			
 			# Determine the field to use
 			$field = ($index == 0 ? '100' : '700');
@@ -429,6 +430,19 @@ class marcConversion
 		
 		# Author
 		$this->fields['245'][0]['c'] = $this->dotEnd ($author);
+	}
+	
+	
+	# Function to space out author initials correctly
+	private function formatInitials ($author)
+	{
+		# Reformat if initials present
+		if (preg_match ('/^(.+), ([A-Z])\.([A-Z])\.$/', $author, $matches)) {
+			$author = "{$matches[1]}, {$matches[2]}. {$matches[3]}.";
+		}
+		
+		# Return the string
+		return $author;
 	}
 	
 	

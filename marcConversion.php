@@ -459,7 +459,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['255'][0] = array (
-			'a' => ucfirst (($scale != 'no scale' ? 'Scale ' : '') . $scale),
+			'a' => 'Scale ' . ($scale == 'no scale' ? 'not given' : $scale),
 		);
 	}
 	

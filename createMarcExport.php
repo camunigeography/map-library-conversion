@@ -140,7 +140,7 @@ class createMarcExport
 	{
 		# Define errors to whitelist
 		$whitelistErrorRegexps = array (
-			
+			'008: Check place code xxk - please set code for specific UK member country eg England, Wales \(if known\).',
 		);
 		
 		# Split the file into individual reports

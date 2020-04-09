@@ -543,7 +543,7 @@ class marcConversion
 		);
 		
 		# Drawer and number
-		$this->fields['852'][0]['d'] = "Drawer {$drawer} {$number}";
+		$this->fields['852'][0]['j'] = "Drawer {$drawer} {$number}";
 	}
 	
 	

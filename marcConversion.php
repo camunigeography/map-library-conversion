@@ -272,7 +272,7 @@ class marcConversion
 			# No date or undated
 			case (in_array ($year, array ('undated', 'no date', 'unknown'))):
 			case (!strlen ($year)):
-				$status06 = 'n' . '####' . '####';
+				$status06 = 'n' . 'uuuu' . 'uuuu';
 				break;
 			# Catch other cases
 			default:

@@ -47,7 +47,7 @@ class marcConversion
 				}
 				
 				# Compile the line
-				$lines[] = $field . ' ' . $indicators . ' ' . implode ($tokens);
+				$lines[] = $field . ($indicators !== false ? ' ' . $indicators : '') . ' ' . implode ($tokens);
 			}
 		}
 		
@@ -57,7 +57,7 @@ class marcConversion
 		# Determine the length, in bytes, which is the first five characters of the 000 (Leader), padded
 		$bytes = mb_strlen ($record);
 		$bytes = str_pad ($bytes, 5, '0', STR_PAD_LEFT);
-		$record = preg_replace ('/^LDR ## (_____)/m', "LDR ## {$bytes}", $record);
+		$record = preg_replace ('/^LDR (_____)/m', "LDR {$bytes}", $record);
 		
 		# Return the result
 		return $record;
@@ -200,6 +200,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['LDR'][0] = array (
+			'_' => false,
 			'' => $string,
 		);
 	}
@@ -210,9 +211,10 @@ class marcConversion
 	{
 		# Date and Time of Latest Transaction; see: https://www.loc.gov/marc/bibliographic/bd005.html
 		$date = date ('YmdHis.0');
-
+		
 		# Register the result
 		$this->fields['005'][0] = array (
+			'_' => false,
 			'' => $date,
 		);
 	}
@@ -227,6 +229,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['007'][0] = array (
+			'_' => false,
 			'' => $string,
 		);
 	}
@@ -240,7 +243,7 @@ class marcConversion
 		
 		# Positions 00-05: Date entered on system [format: yymmdd]
 		$string .= date ('ymd');
-
+		
 		# Position 06: Type of date/Publication status
 		# Positions 07-10 - Date 1
 		# Positions 11-14 - Date 2
@@ -356,6 +359,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['008'][0] = array (
+			'_' => false,
 			'' => $string,
 		);
 	}

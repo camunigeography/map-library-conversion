@@ -10,6 +10,7 @@ class mapLibraryConversion extends frontControllerApplication
 		# Specify available arguments as defaults or as NULL (to represent a required argument)
 		$defaults = array (
 			'applicationName' => 'Map library catalogue conversion',
+			'div' => strtolower (__CLASS__),
 			'useDatabase' => false,
 			'dataFile' => './data.csv',
 		);
@@ -55,7 +56,8 @@ class mapLibraryConversion extends frontControllerApplication
 		# Create MARC records from the data
 		$marc = $this->createMarcRecords ($data);
 		
-		var_dump ($marc);
+		# Display the records
+		$this->displayRecords ($marc);
 		
 	}
 	
@@ -99,6 +101,18 @@ class mapLibraryConversion extends frontControllerApplication
 		
 		# Return the string
 		return $marc;
+	}
+	
+	
+	# Function to display the records, with subfield highlighting
+	public function displayRecords ($string)
+	{
+		# Highlight subfields
+		$doubleDagger = chr(0xe2).chr(0x80).chr(0xa1);
+		$string = preg_replace ("/({$doubleDagger}[a-z0-9])/", '<strong>\1</strong>', $string);
+		
+		# Render for display
+		echo "\n<pre>" . $string . "\n</pre>";
 	}
 }
 

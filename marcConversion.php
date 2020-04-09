@@ -486,7 +486,7 @@ class marcConversion
 	{
 		# Register the result
 		$this->fields['300'][] = array (
-			'a' => ($number == 1 ? '1 map' : $number . ' maps'),
+			'a' => $this->dotEnd (($number == 1 ? '1 map' : $number . ' maps')),
 		);
 	}
 	

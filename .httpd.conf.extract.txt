@@ -2,7 +2,7 @@
 
 # Load using:
 #	# Map library catalogue conversion system
-#	Include /path/to/map-library-conversion/.httpd.conf.extract
+#	Include /path/to/map-library-conversion/.httpd.conf.extract.txt
 #	Use MacroMapLibraryConversion /library/maps "/path/to/site/:/path/to/map-library-conversion/:/path/to/php/libraries/"
 
 

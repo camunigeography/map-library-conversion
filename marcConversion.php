@@ -527,7 +527,7 @@ class marcConversion
 	{
 		# Register the result
 		$this->fields['300'][] = array (
-			'a' => $this->dotEnd (($number == 1 ? '1 map' : str_replace ('* ', ' ', $number . ' maps'))),
+			'a' => $this->dotEnd ((($number == 1 || !strlen ($number)) ? '1 map' : str_replace ('* ', ' ', $number . ' maps'))),
 		);
 	}
 	

@@ -527,7 +527,7 @@ class marcConversion
 	{
 		# Register the result
 		$this->fields['300'][] = array (
-			'a' => $this->dotEnd (($number == 1 ? '1 map' : $number . ' maps')),
+			'a' => $this->dotEnd (($number == 1 ? '1 map' : str_replace ('* ', ' ', $number . ' maps'))),
 		);
 	}
 	
@@ -538,6 +538,7 @@ class marcConversion
 		# Register the result
 		foreach ($notes as $note) {
 			$note = trim ($note);
+			if (substr_count (strtolower ($note), 'including duplicates')) {$note = 'Total includes duplicates.';}
 			if (strlen ($note)) {
 				$this->fields['500'][] = array (
 					'a' => ucfirst (strtolower ($note)),

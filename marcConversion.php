@@ -505,7 +505,7 @@ class marcConversion
 		
 		# Register the result
 		$this->fields['255'][0] = array (
-			'a' => 'Scale ' . ($scale == 'no scale' ? 'not given' : $scale),
+			'a' => $this->dotEnd ('Scale ' . ($scale == 'no scale' ? 'not given' : $scale)),
 		);
 	}
 	

@@ -95,7 +95,7 @@ class marcConversion
 		$this->generateAuthors ($record['Author']);
 		
 		# Title
-		$this->generate245 ($record['Title'], $record['Year'], $record['Author']);
+		$this->generate245 ($record['Title'], $record['Author']);
 		
 		# Edition
 		$this->generateEdition ($record['Variant Title']);
@@ -480,12 +480,12 @@ class marcConversion
 	
 	
 	# Title
-	private function generate245 ($title, $dateStatement, $author)
+	private function generate245 ($title, $author)
 	{
 		# Register the result
 		$this->fields['245'][0] = array (
 			'_' => '10',
-			'a' => $this->reformatWords ($title) . ($dateStatement ? ', ' . $dateStatement : '') . ($author ? ' /' : '.'),
+			'a' => $this->reformatWords ($title) . ($author ? ' /' : '.'),
 		);
 		
 		# Author

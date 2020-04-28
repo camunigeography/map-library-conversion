@@ -441,7 +441,7 @@ class marcConversion
 			$author = $this->formatInitials ($author);
 			
 			# Determine the field to use
-			$field = ($index == 0 ? '100' : '700');
+			$field = ($index == 0 ? '110' : '710');
 			
 			# Split the author components
 			// TODO

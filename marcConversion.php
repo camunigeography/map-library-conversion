@@ -541,7 +541,7 @@ class marcConversion
 			if (substr_count (strtolower ($note), 'including duplicates')) {$note = 'Total includes duplicates.';}
 			if (strlen ($note)) {
 				$this->fields['500'][] = array (
-					'a' => ucfirst (strtolower ($note)),
+					'a' => $this->dotEnd (ucfirst (strtolower ($note))),
 				);
 			}
 		}

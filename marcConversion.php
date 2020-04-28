@@ -483,9 +483,15 @@ class marcConversion
 	# Title
 	private function generate245 ($title, $author)
 	{
+		# Determine non-filing characters
+		$secondIndicator = '0';
+		if (preg_match ('/^(the )/', strtolower ($title), $matches)) {
+			$secondIndicator = strlen ($matches[1]);	// E.g. '4'
+		}
+		
 		# Register the result
 		$this->fields['245'][0] = array (
-			'_' => '10',
+			'_' => '1' . $secondIndicator,
 			'a' => $this->reformatWords ($title) . ($author ? ' /' : '.'),
 		);
 		

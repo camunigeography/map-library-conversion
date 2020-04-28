@@ -516,14 +516,14 @@ class marcConversion
 		# Initalise array
 		$field260 = array ();
 		
-		# Publisher
-		if ($publisher) {
-			$field260['a'] = $publisher;
-		}
-		
 		# Place of publication
 		if ($place) {
-			$field260['b'] = $place;
+			$field260['a'] = $place;
+		}
+		
+		# Publisher
+		if ($publisher) {
+			$field260['b'] = $publisher;
 		}
 		
 		# Date of publication (not of map depiction)

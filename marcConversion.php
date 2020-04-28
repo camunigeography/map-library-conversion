@@ -104,7 +104,7 @@ class marcConversion
 		$this->generateScale ($record['Scale']);
 		
 		# Publication
-		$this->generatePublication ($record['Author'], $record['Notes 1']);
+		$this->generatePublication ($record['Author'], $record['Year'], $record['Notes 1']);
 		
 		# Physical description
 		$this->generatePhysicalDescription ($record['No of items']);
@@ -543,7 +543,7 @@ class marcConversion
 	
 	
 	# Publication
-	private function generatePublication ($publisher, $dateNote)
+	private function generatePublication ($publisher, $year, $dateNote)
 	{
 		# Initalise array
 		$field260 = array ();
@@ -560,6 +560,8 @@ class marcConversion
 		$date = false;
 		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
 			$date = $matches[1];
+		} else if ($year) {
+			$date = $year;
 		}
 		
 		# Place of publication
@@ -572,8 +574,8 @@ class marcConversion
 			$field260['b'] = $publisher . ($date ? ',' : '');
 		}
 		
-		# Date of publication (not of map depiction)
-		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
+		# Date of publication
+		if ($date) {
 			$field260['c'] = $date;
 		}
 		

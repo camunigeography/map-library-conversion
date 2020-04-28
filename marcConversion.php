@@ -496,8 +496,8 @@ class marcConversion
 	{
 		# Determine non-filing characters
 		$secondIndicator = '0';
-		if (preg_match ('/^(the )/', strtolower ($title), $matches)) {
-			$secondIndicator = strlen ($matches[1]);	// E.g. '4'
+		if (preg_match ('/^((a|die|il|la|the) )/', strtolower ($title), $matches)) {
+			$secondIndicator = strlen ($matches[1]);	// E.g. '4' for 'the'
 		}
 		
 		# Register the result

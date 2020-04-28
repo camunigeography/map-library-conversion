@@ -485,7 +485,7 @@ class marcConversion
 		# Register the result
 		$this->fields['245'][0] = array (
 			'_' => '10',
-			'a' => 'Map of ' . $this->reformatWords ($title) . ($dateStatement ? ', ' . $dateStatement : '') . ($author ? ' /' : '.'),
+			'a' => $this->reformatWords ($title) . ($dateStatement ? ', ' . $dateStatement : '') . ($author ? ' /' : '.'),
 		);
 		
 		# Author

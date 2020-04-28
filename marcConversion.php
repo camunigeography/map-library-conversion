@@ -106,12 +106,12 @@ class marcConversion
 		# Physical description
 		$this->generatePhysicalDescription ($record['No of items']);
 		
-		# Type
-		$this->generateType ($record['Type']);
-		
 		# Note
 		$notes = array ($record['Notes 1'], $record['Notes 2'], $record['Notes 3']);
 		$this->generateNotes ($notes);
+		
+		# Type
+		$this->generateType ($record['Type']);
 		
 		# Publication
 		$this->generatePlace ($record['Area']);
@@ -494,19 +494,6 @@ class marcConversion
 	}
 	
 	
-	# Publication
-	private function generateType ($type)
-	{
-		# End if none
-		if (!strlen ($type)) {return false;}
-		
-		# Register the result
-		$this->fields['500'][] = array (
-			'a' => 'Type: ' . $type,
-		);
-	}
-	
-	
 	# Note
 	private function generateNotes ($notes)
 	{
@@ -519,6 +506,34 @@ class marcConversion
 				);
 			}
 		}
+	}
+	
+	
+	# Publication
+	private function generateType ($type)
+	{
+		# End if none
+		if (!strlen ($type)) {return false;}
+		
+		# Obtain the type; see authorised names at: https://id.loc.gov/authorities/subjects/sh85080858.html
+		if (preg_match ('/(postcode|political|population)/', $type)) {
+			$typeLoc = 'Maps';
+		} else if (preg_match ('/(tourist)/', $type)) {
+			$typeLoc = 'Tourist maps';
+		} else {
+			$typeLoc = 'Topographic maps';
+		}
+		
+		# Register the result
+		if ($typeLoc == 'Maps') {
+			$this->fields['500'][] = array (
+				'a' => ucfirst ($type) . ' maps',
+			);
+		}
+		$this->fields['655'][] = array (
+			'_' => '#0',
+			'a' => $typeLoc,
+		);
 	}
 	
 	

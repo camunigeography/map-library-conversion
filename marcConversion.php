@@ -101,7 +101,7 @@ class marcConversion
 		$this->generateScale ($record['Scale']);
 		
 		# Publication
-		$this->generatePublication ($record['Author'], /* place= */ false, $record['Year']);
+		$this->generatePublication ($record['Author'], /* place= */ false, $record['Notes 1']);
 		
 		# Physical description
 		$this->generatePhysicalDescription ($record['No of items']);
@@ -511,7 +511,7 @@ class marcConversion
 	
 	
 	# Publication
-	private function generatePublication ($publisher, $place, $date)
+	private function generatePublication ($publisher, $place, $dateNote)
 	{
 		# Publisher
 		$this->fields['260'][0] = array (
@@ -524,8 +524,8 @@ class marcConversion
 		}
 		
 		# Date of publication (not of map depiction)
-		if ($date) {
-			$this->fields['260'][0]['c'] = $date;
+		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
+			$this->fields['260'][0]['c'] = $matches[1];
 		}
 		
 		# Add dot-end to last

@@ -128,7 +128,13 @@ class marcConversion
 	# Dot-end
 	private function dotEnd ($string)
 	{
-		return $string . (substr ($string, -1) == '.' ? '' : '.');
+		# Add dot
+		if (!preg_match ('/\.$/', $string)) {
+			$string .= '.';
+		}
+		
+		# Return the string
+		return $string;
 	}
 	
 	

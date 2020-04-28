@@ -23,8 +23,9 @@ class marcConversion
 		# Convert each field
 		$this->processFields ($record);
 		
-		//# Sort the fields, leaving the Leader at the start
-		//ksort ($this->fields);
+		# Sort the fields, leaving the Leader at the start
+		ksort ($this->fields);
+		$this->fields = application::array_move_to_start ($this->fields, 'LDR');
 		
 		# Assemble each line
 		$lines = array ();

@@ -117,8 +117,8 @@ class marcConversion
 		# Type
 		$this->generateType ($record['Type']);
 		
-		# Publication
-		$this->generatePlace ($record['Area']);
+		# Subject Added Entry-Geographic Name
+		$this->subjectAddedEntry ($record['Area']);
 		
 		# Location
 		$this->generateLocation ($record['Drawer'], $record['Number']);
@@ -646,15 +646,17 @@ class marcConversion
 	}
 	
 	
-	# Place (of the map content)
-	private function generatePlace ($country)
+	# 651 - Subject Added Entry-Geographic Name
+	private function subjectAddedEntry ($place)
 	{
 		# End if none
-		if (!strlen ($country)) {return false;}
+		if (!strlen ($place)) {return false;}
 		
 		# Register the result
-		$this->fields['751'][0] = array (
-			'a' => $this->reformatWords ($country),
+		$this->fields['651'][0] = array (
+			'_' => '#4',
+			'a' => $this->reformatWords ($place),
+			'v' => $this->dotEnd ('Maps'),
 		);
 	}
 	

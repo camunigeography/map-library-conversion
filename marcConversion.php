@@ -443,8 +443,11 @@ class marcConversion
 			# Determine the field to use
 			$field = ($index == 0 ? '110' : '710');
 			
-			# Split the author components
-			// TODO
+			# Split place from publisher
+			if (substr_count ($author, ',')) {
+				list ($author, $place) = explode (',', $author, 2);
+				$author = trim ($author);
+			}
 			
 			# Register the field
 			$this->fields[$field][] = array (
@@ -466,6 +469,14 @@ class marcConversion
 		
 		# Author
 		if ($author) {
+			
+			# Split place from publisher
+			if (substr_count ($author, ',')) {
+				list ($author, $place) = explode (',', $author, 2);
+				$author = trim ($author);
+			}
+			
+			# Register
 			$this->fields['245'][0]['c'] = $this->dotEnd ($author);
 		}
 	}

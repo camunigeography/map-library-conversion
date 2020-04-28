@@ -583,26 +583,19 @@ class marcConversion
 		}
 		
 		# Place of publication
-		if ($place) {
-			$field260['a'] = $place . ': ';		// Place can only exist if publisher exists, so guaranteed to have colon
-		}
+		$field260['a'] = ($place ? $place : '[S.l.]') . ': ';
 		
 		# Publisher
-		if ($publisher) {
-			$field260['b'] = $publisher . ($date ? ',' : '');
-		}
+		$field260['b'] = ($publisher ? $publisher : '[s.n.]') . ($date ? ',' : '');
 		
 		# Date of publication
 		if ($date) {
 			$field260['c'] = $date;
 		}
 		
-		# End if no subfields
-		if (!$field260) {return false;}
-		
 		# Add dot-end to last
 		$lastKey = array_key_last ($field260);
-		$field260[$lastKey] = $this->dotEnd ($field260[$lastKey]);
+		$field260[$lastKey] = $this->dotEnd ($field260[$lastKey], ']');
 		
 		# Register
 		$this->fields['260'][0] = $field260;

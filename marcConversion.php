@@ -437,7 +437,7 @@ class marcConversion
 		# Register the result
 		$this->fields['045'][0] = array (
 			'_' => (count ($years) == 1 ? '0' : '1') . '#',
-			'a' => 'd' . implode ($this->doubleDagger . 'd', $years),
+			'b' => 'd' . implode ("{$this->doubleDagger}b" . 'd', $years),
 		);
 	}
 	

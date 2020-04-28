@@ -524,19 +524,25 @@ class marcConversion
 			$publisher = trim ($publisher);
 		}
 		
+		# Determine whether date is present
+		$date = false;
+		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
+			$date = $matches[1];
+		}
+		
 		# Place of publication
 		if ($place) {
-			$field260['a'] = $place . ': ';
+			$field260['a'] = $place . ': ';		// Place can only exist if publisher exists, so guaranteed to have colon
 		}
 		
 		# Publisher
 		if ($publisher) {
-			$field260['b'] = $publisher;
+			$field260['b'] = $publisher . ($date ? ',' : '');
 		}
 		
 		# Date of publication (not of map depiction)
 		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
-			$field260['c'] = $matches[1];
+			$field260['c'] = $date;
 		}
 		
 		# End if no subfields

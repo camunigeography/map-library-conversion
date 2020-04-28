@@ -616,6 +616,9 @@ class marcConversion
 	# Note
 	private function generateNotes ($notes)
 	{
+		# Remove duplicate notes
+		$notes = array_unique ($notes);
+		
 		# Register the result
 		foreach ($notes as $note) {
 			$note = trim ($note);

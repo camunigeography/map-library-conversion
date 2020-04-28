@@ -126,10 +126,10 @@ class marcConversion
 	
 	
 	# Dot-end
-	private function dotEnd ($string)
+	private function dotEnd ($string, $exceptEnd = '')
 	{
 		# Add dot
-		if (!preg_match ('/\.$/', $string)) {
+		if (!preg_match ('/\.' . $exceptEnd . '$/', $string)) {
 			$string .= '.';
 		}
 		

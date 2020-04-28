@@ -513,24 +513,33 @@ class marcConversion
 	# Publication
 	private function generatePublication ($publisher, $place, $dateNote)
 	{
+		# Initalise array
+		$field260 = array ();
+		
 		# Publisher
-		$this->fields['260'][0] = array (
-			'a' => $publisher,
-		);
+		if ($publisher) {
+			$field260['a'] = $publisher;
+		}
 		
 		# Place of publication
 		if ($place) {
-			$this->fields['260'][0]['b'] = $place;
+			$field260['b'] = $place;
 		}
 		
 		# Date of publication (not of map depiction)
 		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
-			$this->fields['260'][0]['c'] = $matches[1];
+			$field260['c'] = $matches[1];
 		}
 		
+		# End if no subfields
+		if (!$field260) {return false;}
+		
 		# Add dot-end to last
-		$lastKey = array_key_last ($this->fields['260'][0]);
-		$this->fields['260'][0][$lastKey] = $this->dotEnd ($this->fields['260'][0][$lastKey]);
+		$lastKey = array_key_last ($field260);
+		$field260[$lastKey] = $this->dotEnd ($field260[$lastKey]);
+		
+		# Register
+		$this->fields['260'][0] = $field260;
 	}
 	
 	

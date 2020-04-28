@@ -14,6 +14,9 @@ class marcConversion
 	# Convert to MARC
 	public function convertToMarc ($record)
 	{
+		# Define unicode symbols
+		$this->doubleDagger = chr(0xe2).chr(0x80).chr(0xa1);
+		
 		# Start an array of fields
 		$this->fields = array ();
 		
@@ -22,9 +25,6 @@ class marcConversion
 		
 		//# Sort the fields, leaving the Leader at the start
 		//ksort ($this->fields);
-		
-		# Define unicode symbols
-		$doubleDagger = chr(0xe2).chr(0x80).chr(0xa1);
 		
 		# Assemble each line
 		$lines = array ();
@@ -42,7 +42,7 @@ class marcConversion
 				$tokens = array ();
 				foreach ($subfields as $subfield => $value) {
 					if (strlen ($value)) {
-						$tokens[] = (strlen ($subfield) ? $doubleDagger . $subfield : '') . $value;		// Double-dagger omitted for LDR
+						$tokens[] = (strlen ($subfield) ? $this->doubleDagger . $subfield : '') . $value;		// Double-dagger omitted for LDR
 					}
 				}
 				
@@ -87,6 +87,9 @@ class marcConversion
 		
 		# 040 field
 		$this->generate040 ();
+		
+		# 045 field - Time period of content
+		$this->generateTimePeriod ($record['Year']);
 		
 		# Author
 		$this->generateAuthors ($record['Author']);
@@ -416,6 +419,24 @@ class marcConversion
 			'a' => 'UkCU-P',
 			'b' => 'eng',
 			'c' => 'aacr',
+		);
+	}
+	
+	
+	# 045 - Time period of content
+	private function generateTimePeriod ($year)
+	{
+		# End if not real date given, e.g. undated, etc.
+		if (!preg_match ('([0-9]{4})', $year)) {return;}
+		
+		# Extract the one or more dates, excluding 'c' (circa) etc.
+		preg_match_all ('([0-9]{4})', $year, $matches, PREG_PATTERN_ORDER);
+		$years = $matches[0];
+		
+		# Register the result
+		$this->fields['045'][0] = array (
+			'_' => (count ($years) == 1 ? '0' : '1') . '#',
+			'a' => 'd' . implode ($this->doubleDagger . 'd', $years),
 		);
 	}
 	

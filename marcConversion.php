@@ -81,7 +81,7 @@ class marcConversion
 		$this->generate007 ($record['Title']);
 		
 		# 008 field
-		$this->generate008 ($record['Year'], $record['Author']);
+		$this->generate008 ($record['Year'], $record['Notes 1'], $record['Author']);
 		
 		//# ISBN
 		//$this->generateIsbn ($record['ISBN']);
@@ -267,8 +267,13 @@ class marcConversion
 	
 	
 	# 008 field
-	private function generate008 ($year, $publisher)
+	private function generate008 ($year, $dateNote, $publisher)
 	{
+		# If there is a note indicating reproduction, use that as the publication year
+		if (preg_match ('/^([0-9]{4}) reproduction/', $dateNote, $matches)) {
+			$year = $matches[1];
+		}
+		
 		# Start the string
 		$string = '';
 		

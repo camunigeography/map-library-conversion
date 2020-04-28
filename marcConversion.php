@@ -101,7 +101,7 @@ class marcConversion
 		$this->generateScale ($record['Scale']);
 		
 		# Publication
-		$this->generatePublication ($record['Author'], /* place= */ false, $record['Notes 1']);
+		$this->generatePublication ($record['Author'], $record['Notes 1']);
 		
 		# Physical description
 		$this->generatePhysicalDescription ($record['No of items']);
@@ -511,14 +511,22 @@ class marcConversion
 	
 	
 	# Publication
-	private function generatePublication ($publisher, $place, $dateNote)
+	private function generatePublication ($publisher, $dateNote)
 	{
 		# Initalise array
 		$field260 = array ();
 		
+		# Split out place from publisher if present
+		$place = false;
+		if (substr_count ($publisher, ',')) {
+			list ($publisher, $place) = explode (',', $publisher, 2);
+			$place = trim ($place);
+			$publisher = trim ($publisher);
+		}
+		
 		# Place of publication
 		if ($place) {
-			$field260['a'] = $place;
+			$field260['a'] = $place . ': ';
 		}
 		
 		# Publisher

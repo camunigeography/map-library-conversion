@@ -423,6 +423,15 @@ class marcConversion
 	# Authors
 	private function generateAuthors ($authors)
 	{
+		# End if none
+		if (!$authors) {
+			$this->fields['100'][] = array (
+				'_' => '1#',
+				'a' => 'Anonymous.',
+			);
+			return;
+		}
+		
 		# Split by and
 		$authors = explode (' and ', $authors);
 		
@@ -452,11 +461,13 @@ class marcConversion
 		# Register the result
 		$this->fields['245'][0] = array (
 			'_' => '10',
-			'a' => 'Map of ' . $this->reformatWords ($title) . ' /',
+			'a' => 'Map of ' . $this->reformatWords ($title) . ($author ? ' /' : '.'),
 		);
 		
 		# Author
-		$this->fields['245'][0]['c'] = $this->dotEnd ($author);
+		if ($author) {
+			$this->fields['245'][0]['c'] = $this->dotEnd ($author);
+		}
 	}
 	
 	

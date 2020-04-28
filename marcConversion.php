@@ -513,12 +513,24 @@ class marcConversion
 	# Publication
 	private function generatePublication ($publisher, $place, $date)
 	{
-		# Register the result
+		# Publisher
 		$this->fields['260'][0] = array (
 			'a' => $publisher,
-			'b' => $place,
-			'c' => $date,
 		);
+		
+		# Place of publication
+		if ($place) {
+			$this->fields['260'][0]['b'] = $place;
+		}
+		
+		# Date of publication (not of map depiction)
+		if ($date) {
+			$this->fields['260'][0]['c'] = $date;
+		}
+		
+		# Add dot-end to last
+		$lastKey = array_key_last ($this->fields['260'][0]);
+		$this->fields['260'][0][$lastKey] = $this->dotEnd ($this->fields['260'][0][$lastKey]);
 	}
 	
 	
@@ -794,5 +806,14 @@ class marcConversion
 		return $placeCode;
 	}
 }
+
+
+# Polyfill function for array_key_last; see: https://www.php.net/manual/en/function.array-key-last.php#124007
+if( !function_exists('array_key_last') ) {
+    function array_key_last(array $array) {
+        if( !empty($array) ) return key(array_slice($array, -1, 1, true));
+    }
+}
+
 
 ?>

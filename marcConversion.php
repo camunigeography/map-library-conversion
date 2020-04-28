@@ -77,7 +77,7 @@ class marcConversion
 		$this->generate005 ();
 		
 		# ISBN
-		$this->generate007 ();
+		$this->generate007 ($record['Title']);
 		
 		# 008 field
 		$this->generate008 ($record['Year'], $record['Author']);
@@ -221,11 +221,38 @@ class marcConversion
 	
 	
 	# 007 field - Physical Description Fixed Field; see: https://www.loc.gov/marc/bibliographic/bd007.html
-	private function generate007 ()
+	private function generate007 ($title)
 	{
 		# Set the value for Map
 		# See: https://www.loc.gov/marc/bibliographic/bd007a.html
-		$string = 'aj#|||||';
+		
+		# 00 - Category of material
+		$string  = 'a';		// Map
+		
+		# 01 - Specific material designation
+		if (substr_count (strtolower ($title), 'atlas')) {
+			$string .= 'd';		// Atlas
+		} else {
+			$string .= 'j';		// Map
+		}
+		
+		# 02 - Undefined
+		$string .= '#';		// Undefined
+		
+		# 03 - Color
+		$string .= '|';		// No attempt to code
+		
+		# 04 - Physical medium
+		$string .= 'a';		// Paper
+		
+		# 05 - Type of reproduction
+		$string .= '|';		// No attempt to code
+		
+		# 06 - Production/reproduction details
+		$string .= '|';		// No attempt to code
+		
+		# 07 - Positive/negative aspect
+		$string .= '|';		// No attempt to code
 		
 		# Register the result
 		$this->fields['007'][0] = array (

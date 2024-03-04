@@ -3,15 +3,10 @@
 # Load using:
 #	# Map library catalogue conversion system
 #	Include /path/to/map-library-conversion/.httpd.conf.extract.txt
-#	Use MacroMapLibraryConversion /library/maps "/path/to/site/:/path/to/map-library-conversion/:/path/to/php/libraries/"
+#	Use MacroMapLibraryConversion /library/maps "/path/to/repo"
 
 
-<Macro MacroMapLibraryConversion $baseUrl $repoPath $includePath>
-	
-	# Include path
-	<Location $baseUrl>
-		php_value include_path "$includePath"
-	</Location>
+<Macro MacroMapLibraryConversion $baseUrl $repoPath>
 	
 	# Front controller application support
 	Use MacroFrontControllerApplication "$baseUrl/" "Map library catalogue conversion system"

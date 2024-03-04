@@ -1,7 +1,7 @@
 <?php
 
 # Load and run the map library catalogue conversion class
-require_once ('mapLibraryConversion.php');
+require_once ('vendor/autoload.php');
 new mapLibraryConversion ();
 
 ?>

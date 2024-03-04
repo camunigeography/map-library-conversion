@@ -1,7 +1,6 @@
 <?php
 
 # Class to manage Map library catalogue conversion
-require_once ('frontControllerApplication.php');
 class mapLibraryConversion extends frontControllerApplication
 {
 	# Function to assign defaults additional to the general application defaults
@@ -117,7 +116,6 @@ class mapLibraryConversion extends frontControllerApplication
 	private function loadData ()
 	{
 		# Load the data
-		require_once ('csv.php');
 		$data = csv::getData ($this->settings['dataFile'], $stripKey = false, $hasNoKeys = true, $allowsRowsWithEmptyFirstColumn = true);
 		
 		# Trim cells and fix double-spaces

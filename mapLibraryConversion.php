@@ -12,6 +12,7 @@ class mapLibraryConversion extends frontControllerApplication
 			'applicationName' => 'Map library catalogue conversion',
 			'div' => strtolower (__CLASS__),
 			'useDatabase' => false,
+			'tabUlClass' => 'tabsflat',
 			'dataFile' => './data.csv',
 		);
 		

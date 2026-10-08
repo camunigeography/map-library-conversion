@@ -5,9 +5,9 @@
     "license": "GPL-3.0-only",
     "minimum-stability": "stable",
     "require": {
-        "libpurecontent/frontcontrollerapplication": "^1.13",
-        "libpurecontent/csv": "^1.5",
-        "libpurecontent/application": "^1.9"
+        "libpurecontent/frontcontrollerapplication": "^1.20",
+        "libpurecontent/csv": "^1.8",
+        "libpurecontent/application": "^1.10"
     },
     "autoload": {
         "files": ["mapLibraryConversion.php"]

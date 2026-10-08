@@ -3,6 +3,11 @@
 # Class to handle MARC conversion
 class marcConversion
 {
+	# Class properties
+	private $fields = array ();
+	private $doubleDagger;
+	
+	
 	# Constructor
 	public function __construct ()
 	{

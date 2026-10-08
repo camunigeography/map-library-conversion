@@ -3,6 +3,10 @@
 # Class to generate the MARC21 output as text
 class createMarcExport
 {
+	# Class properties
+	private $doubleDagger;
+	
+	
 	# Constructor
 	public function __construct ()
 	{
